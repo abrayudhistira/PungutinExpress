@@ -1,7 +1,7 @@
 const Sequelize = require('sequelize');
 module.exports = function(sequelize, DataTypes) {
-  return sequelize.define('refresh_token', {
-    id: {
+  return sequelize.define('notification', {
+    notification_id: {
       autoIncrement: true,
       type: DataTypes.INTEGER.UNSIGNED,
       allowNull: false,
@@ -15,29 +15,42 @@ module.exports = function(sequelize, DataTypes) {
         key: 'user_id'
       }
     },
-    token: {
-      type: DataTypes.STRING(255),
+    type: {
+      type: DataTypes.ENUM('pickup_reminder','report_update','general'),
       allowNull: false
     },
-    expires_at: {
-      type: DataTypes.DATE,
+    content: {
+      type: DataTypes.TEXT,
       allowNull: false
+    },
+    scheduled_at: {
+      type: DataTypes.DATE,
+      allowNull: true
+    },
+    sent_at: {
+      type: DataTypes.DATE,
+      allowNull: true
+    },
+    is_read: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
+      defaultValue: 0
     }
   }, {
     sequelize,
-    tableName: 'refresh_token',
-    timestamps: true,
+    tableName: 'notification',
+    timestamps: false,
     indexes: [
       {
         name: "PRIMARY",
         unique: true,
         using: "BTREE",
         fields: [
-          { name: "id" },
+          { name: "notification_id" },
         ]
       },
       {
-        name: "idx_rt_user",
+        name: "idx_notif_user",
         using: "BTREE",
         fields: [
           { name: "user_id" },

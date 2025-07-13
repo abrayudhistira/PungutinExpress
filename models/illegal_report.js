@@ -1,7 +1,7 @@
 const Sequelize = require('sequelize');
 module.exports = function(sequelize, DataTypes) {
-  return sequelize.define('refresh_token', {
-    id: {
+  return sequelize.define('illegal_report', {
+    report_id: {
       autoIncrement: true,
       type: DataTypes.INTEGER.UNSIGNED,
       allowNull: false,
@@ -15,29 +15,42 @@ module.exports = function(sequelize, DataTypes) {
         key: 'user_id'
       }
     },
-    token: {
-      type: DataTypes.STRING(255),
-      allowNull: false
+    latitude: {
+      type: DataTypes.DECIMAL(10,7),
+      allowNull: true
     },
-    expires_at: {
+    longitude: {
+      type: DataTypes.DECIMAL(10,7),
+      allowNull: true
+    },
+    photo_url: {
+      type: DataTypes.STRING(255),
+      allowNull: true
+    },
+    description: {
+      type: DataTypes.TEXT,
+      allowNull: true
+    },
+    reported_at: {
       type: DataTypes.DATE,
-      allowNull: false
+      allowNull: false,
+      defaultValue: Sequelize.Sequelize.fn('current_timestamp')
     }
   }, {
     sequelize,
-    tableName: 'refresh_token',
-    timestamps: true,
+    tableName: 'illegal_report',
+    timestamps: false,
     indexes: [
       {
         name: "PRIMARY",
         unique: true,
         using: "BTREE",
         fields: [
-          { name: "id" },
+          { name: "report_id" },
         ]
       },
       {
-        name: "idx_rt_user",
+        name: "idx_rep_user",
         using: "BTREE",
         fields: [
           { name: "user_id" },

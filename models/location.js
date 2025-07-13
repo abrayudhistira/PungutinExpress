@@ -1,13 +1,13 @@
 const Sequelize = require('sequelize');
 module.exports = function(sequelize, DataTypes) {
-  return sequelize.define('refresh_token', {
-    id: {
+  return sequelize.define('location', {
+    location_id: {
       autoIncrement: true,
       type: DataTypes.INTEGER.UNSIGNED,
       allowNull: false,
       primaryKey: true
     },
-    user_id: {
+    provider_id: {
       type: DataTypes.INTEGER.UNSIGNED,
       allowNull: false,
       references: {
@@ -15,32 +15,44 @@ module.exports = function(sequelize, DataTypes) {
         key: 'user_id'
       }
     },
-    token: {
-      type: DataTypes.STRING(255),
+    name: {
+      type: DataTypes.STRING(100),
       allowNull: false
     },
-    expires_at: {
-      type: DataTypes.DATE,
+    type: {
+      type: DataTypes.ENUM('TPS','TPA','TPPengelolaan'),
       allowNull: false
+    },
+    address: {
+      type: DataTypes.STRING(255),
+      allowNull: true
+    },
+    latitude: {
+      type: DataTypes.DECIMAL(10,7),
+      allowNull: true
+    },
+    longitude: {
+      type: DataTypes.DECIMAL(10,7),
+      allowNull: true
     }
   }, {
     sequelize,
-    tableName: 'refresh_token',
-    timestamps: true,
+    tableName: 'location',
+    timestamps: false,
     indexes: [
       {
         name: "PRIMARY",
         unique: true,
         using: "BTREE",
         fields: [
-          { name: "id" },
+          { name: "location_id" },
         ]
       },
       {
-        name: "idx_rt_user",
+        name: "idx_loc_provider",
         using: "BTREE",
         fields: [
-          { name: "user_id" },
+          { name: "provider_id" },
         ]
       },
     ]
